@@ -3,7 +3,7 @@
 ## Este projeto trata da criação de um sistema multiagente para rodar o jogo StarCraft II
 
 ## Antes de rodar o projeto é necessário instalar os seguintes requisitos:
-> 
+>
 > 
 
 ## Para rodar o projeto após ter os requisitos instalados clone este repositório e execute o código python com o seguinte comando
