@@ -9,10 +9,20 @@ from Agent import Agent
 class BaseManager(Agent):
     def buildHandler(self, task):
         chosen = self.env.select_build_worker(task.location)
-        if chosen:
+        if chosen and self.env.can_afford(task.id) and self.env.already_pending(task.id) == 0:
             result = self.env.do(chosen.build(task.id, task.location))
             if result:
                 return True
+        return False
+
+    def expansionHandler(self, task):
+        for structure in self.env.structures(task.id).ready.idle:
+            if self.env.can_afford(task.upgrade):
+                if structure.is_active:
+                    self.env.do(structure.stop())
+                result = self.env.do(structure.build(task.upgrade))
+                if result:
+                    return True
         return False
 
     def trainHandler(self,task):
@@ -23,8 +33,10 @@ class BaseManager(Agent):
                     return True
         return False
 
-    def upgradeHandler(self, task):
+    def abilityHandler(self, task):
         for st in self.env.structures(task.id).ready.idle:
+            if st.is_active:
+                self.env.do(st.stop())
             if self.env.can_afford(task.upgrade) and self.env.tech_requirement_progress(task.location) == 1:
                 result = self.env.do(st(task.upgrade))
                 if result:
@@ -32,8 +44,10 @@ class BaseManager(Agent):
         return False
 
     def researchHandler(self, task):
-        for structure in self.env.structures(task.id).ready:
+        for structure in self.env.structures(task.id).ready.idle:
             if self.env.can_afford(task.upgrade):
+                if structure.is_active:
+                    self.env.do(structure.stop())
                 result = self.env.do(structure.research(task.upgrade))
                 if result:
                     return True
@@ -47,17 +61,18 @@ class BaseManager(Agent):
                 break
 
     async def doAction(self):
-        self.distributeWorkers()
-        self.buildWorkers()
         self.handleTasks()
+        self.buildWorkers()
+        self.distributeWorkers()
 
     def buildWorkers(self):
         for commandCenter in self.env.townhalls.idle:
-            if self.env.can_afford(SCV) and self.env.supply_left > 10:
+            if self.env.can_afford(SCV) and self.env.supply_left > 0 and self.env.supply_workers < self.maxWorkers:
                 self.env.do(commandCenter.train(SCV))
 
     def distributeWorkers(self):
         for scv in self.env.workers.idle:
             self.env.do(scv.gather(self.env.mineral_field.closest_to(scv)))
 
-    handler = [buildHandler, trainHandler, upgradeHandler, researchHandler]
+    maxWorkers = 36
+    handler = [buildHandler, trainHandler, abilityHandler, researchHandler, expansionHandler]
