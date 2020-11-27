@@ -10,6 +10,19 @@ from Agent import Agent
 class BaseManager(Agent):
     async def buildHandler(self, task):
         if self.env.can_afford(task.id) and self.env.already_pending(task.id) == 0:
+            if task.id == UnitTypeId.REFINERY:
+                for th in self.env.townhalls.ready:
+                    vespenes = self.env.vespene_geyser.closer_than(10, th)
+                    myvp = await self.getVespeneLocation(vespenes)
+                    if myvp != None:
+                        task.location = myvp
+                        break
+                if task.location == None:
+                    return False
+
+            if task.id == UnitTypeId.COMMANDCENTER:
+                task.location = await self.env.get_next_expansion()
+
             if task.location == None:
                 task.location = await self.env.find_placement(task.id,random.choice(self.env.structures).position, 50, True, 4, True)
             if task.location:
@@ -76,6 +89,12 @@ class BaseManager(Agent):
         for depot in self.env.structures(UnitTypeId.SUPPLYDEPOT).ready:
             if self.env.enemy_units == [] or depot.distance_to(self.env.enemy_units.closest_to(depot)) > 15:
                 self.env.do(depot(AbilityId.MORPH_SUPPLYDEPOT_LOWER))
+
+    async def getVespeneLocation(self, vespenes):
+        for vp in vespenes:
+            if (await self.env.can_place(UnitTypeId.REFINERY, [vp.position]))[0]:
+                return vp
+        return None
 
     async def doAction(self):
         await self.handleTasks()

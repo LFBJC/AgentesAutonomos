@@ -33,35 +33,19 @@ class Strategist(sc2.BotAI) :
         """
 
     async def on_start(self) :
-        vgs1 = None
-
-        for th in self.townhalls.ready:
-            vgs1 = self.vespene_geyser.closer_than(20, th)
 
         rp = list(self.main_base_ramp.corner_depots)
 
-        ex1 = await self.get_next_expansion()
-
-        vgs2 = self.vespene_geyser.closer_than(20, ex1)
-
-        print(vgs1)
-
-        print(vgs2)
-
-        ex2 = await self.get_next_expansion()
-
-        vgs3 = self.vespene_geyser.closer_than(20, ex2)
-
         self.buildOrder = [
             ("00:17",Task(0, UnitTypeId.SUPPLYDEPOT, rp[0], None)),
-            ("00:29",Task(0, UnitTypeId.REFINERY, vgs1[0], None)),
+            ("00:29",Task(0, UnitTypeId.REFINERY, None, None)),
             ("00:44",Task(0, UnitTypeId.BARRACKS, self.main_base_ramp.barracks_in_middle, None)),
             ("01:32",Task(2, UnitTypeId.COMMANDCENTER, UnitTypeId.ORBITALCOMMAND, AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND)),
             ("01:34",Task(1, UnitTypeId.REAPER, UnitTypeId.BARRACKS, None)),
-            ("01:43",Task(0, UnitTypeId.COMMANDCENTER, ex1, None)),
+            ("01:43",Task(0, UnitTypeId.COMMANDCENTER, None, None)),
             ("02:08",Task(0, UnitTypeId.FACTORY, None, None)),
             ("02:15",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
-            ("02:21",Task(0, UnitTypeId.REFINERY, vgs1[1], None)),
+            ("02:21",Task(0, UnitTypeId.REFINERY, None, None)),
             ("02:51",Task(0, UnitTypeId.FACTORY, None, None)),
             ("02:52",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
             ("02:52",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
@@ -78,11 +62,11 @@ class Strategist(sc2.BotAI) :
             ("04:17",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
             ("04:17",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
             ("04:22",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
-            ("04:31",Task(0, UnitTypeId.COMMANDCENTER, ex2, None)),
+            ("04:31",Task(0, UnitTypeId.COMMANDCENTER, None, None)),
             ("04:41",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
             ("04:41",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
-            ("04:48",Task(0, UnitTypeId.REFINERY, vgs2[0], None)),
-            ("04:48",Task(0, UnitTypeId.REFINERY, vgs2[1], None)),
+            ("04:48",Task(0, UnitTypeId.REFINERY, None, None)),
+            ("04:48",Task(0, UnitTypeId.REFINERY, None, None)),
             ("04:57",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
             # ("05:27",Task(4, UnitTypeId.BARRACKS, None, UnitTypeId.TECHLAB)),
             ("05:28",Task(0, UnitTypeId.FACTORY, None, None)),
