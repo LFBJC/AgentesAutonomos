@@ -1,13 +1,17 @@
-## TODO:
+# TODO:
 
-# Completar a build order
+## Alta prioridade
 
-# Consertar handleUpgrades
+### Decidir build order
 
-# Lidar melhor com as exceções nos métodos handle e no geral
+### Criar comportamento das unidades militares
 
-# Iniciar implementação de ArmyLeader e GroupLeader
+### Alguma forma de scouting (descobrir se o inimigo esta indo para unidades aereas, o que é prejudicial para a estrategia)
 
-# Em Strategist: delegar scouting, checar melhor lugar para construções, definir como mudar build e definir composições para o late game
+## Baixa prioridade
 
-# Definir comunicação e cooperação de agentes, principalmente entre os agentes GroupLeader
+### Melhorar comunicação entre agentes
+
+### Melhorar processo de decisão de onde colocar estruturas
+
+### Melhorar o comportamento do exercito no geral
