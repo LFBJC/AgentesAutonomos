@@ -53,7 +53,7 @@ class Strategist(sc2.BotAI) :
         vgs3 = self.vespene_geyser.closer_than(20, ex2)
 
         self.buildOrder = [
-            ("00:17",Task(0, UnitTypeId.SUPPLYDEPOT, rp[1], None)),
+            ("00:17",Task(0, UnitTypeId.SUPPLYDEPOT, rp[0], None)),
             ("00:29",Task(0, UnitTypeId.REFINERY, vgs1[0], None)),
             ("00:44",Task(0, UnitTypeId.BARRACKS, self.main_base_ramp.barracks_in_middle, None)),
             ("01:32",Task(2, UnitTypeId.COMMANDCENTER, UnitTypeId.ORBITALCOMMAND, AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND)),
@@ -65,7 +65,7 @@ class Strategist(sc2.BotAI) :
             ("02:51",Task(0, UnitTypeId.FACTORY, None, None)),
             ("02:52",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
             ("02:52",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
-            # ("02:57",Task(4, UnitTypeId.BARRACKS, None, UnitTypeId.TECHLAB)),
+            ("02:57",Task(2, UnitTypeId.BARRACKS, UnitTypeId.TECHLAB, AbilityId.BUILD_TECHLAB_BARRACKS)),
             ("03:01",Task(2, UnitTypeId.COMMANDCENTER, UnitTypeId.ORBITALCOMMAND, AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND)),
             ("03:17",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
             ("03:39",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),

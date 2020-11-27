@@ -11,7 +11,7 @@ class BaseManager(Agent):
     async def buildHandler(self, task):
         if self.env.can_afford(task.id) and self.env.already_pending(task.id) == 0:
             if task.location == None:
-                task.location = await self.env.find_placement(task.id,random.choice(self.env.structures).position, 100, True, 3, True)
+                task.location = await self.env.find_placement(task.id,random.choice(self.env.structures).position, 50, True, 4, True)
             if task.location:
                 chosen = self.env.workers.closest_to(task.location)
                 if chosen:
@@ -65,10 +65,24 @@ class BaseManager(Agent):
                 self.tasks.pop(i)
                 break
 
+    def depotRaise(self):
+        for depot in self.env.structures(UnitTypeId.SUPPLYDEPOTLOWERED).ready:
+            if self.env.enemy_units == []:
+                continue
+            if depot.distance_to(self.env.enemy_units.closest_to(depot)) <= 15:
+                self.env.do(depot(AbilityId.MORPH_SUPPLYDEPOT_RAISE))
+
+    def depotLower(self):
+        for depot in self.env.structures(UnitTypeId.SUPPLYDEPOT).ready:
+            if self.env.enemy_units == [] or depot.distance_to(self.env.enemy_units.closest_to(depot)) > 15:
+                self.env.do(depot(AbilityId.MORPH_SUPPLYDEPOT_LOWER))
+
     async def doAction(self):
         await self.handleTasks()
         self.buildWorkers()
         self.distributeIdleWorkers()
+        self.depotLower()
+        self.depotRaise()
         await self.env.distribute_workers()
 
     def buildWorkers(self):
