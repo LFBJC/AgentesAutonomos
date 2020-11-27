@@ -5,6 +5,6 @@ from sc2.ids.unit_typeid import UnitTypeId
 from Agent import Agent
 
 class ArmyLeader(Agent):
-    """
-
-    """
+    currentStance = 0
+    stanceHandler = []
+    groups = []

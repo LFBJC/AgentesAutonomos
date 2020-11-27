@@ -8,6 +8,7 @@ from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.ability_id import AbilityId
 from sc2.ids.upgrade_id import UpgradeId
 from sc2.units import Units
+from sc2.unit import Unit
 from Task import Task
 
 class Strategist(sc2.BotAI) :
@@ -89,6 +90,49 @@ class Strategist(sc2.BotAI) :
             ("07:00",Task(0, UnitTypeId.ARMORY, None, None))
         ]
 
+    async def on_unit_destroyed(self, unit_tag: int):
+        """
+        Override this in your bot class.
+        Note that this function uses unit tags and not the unit objects
+        because the unit does not exist any more.
+        This will event will be called when a unit (or structure) dies.
+        For enemy units, this only works if the enemy unit was in vision on death.
+        :param unit_tag:
+        """
+
+    async def on_unit_created(self, unit: Unit):
+        """ Override this in your bot class. This function is called when a unit is created.
+        :param unit: """
+
+    async def on_unit_took_damage(self, unit: Unit, amount_damage_taken: float):
+        """
+        Override this in your bot class. This function is called when your own unit (unit or structure) took damage.
+        It will not be called if the unit died this frame.
+        This may be called frequently for terran structures that are burning down, or zerg buildings that are off creep,
+        or terran bio units that just used stimpack ability.
+        TODO: If there is a demand for it, then I can add a similar event for when enemy units took damage
+        Examples::
+            print(f"My unit took damage: {unit} took {amount_damage_taken} damage")
+        :param unit:
+        """
+
+    async def on_enemy_unit_entered_vision(self, unit: Unit):
+        """
+        Override this in your bot class. This function is called when an enemy unit (unit or structure) entered vision (which was not visible last frame).
+        :param unit:
+        """
+
+    async def on_enemy_unit_left_vision(self, unit_tag: int):
+        """
+        Override this in your bot class. This function is called when an enemy unit (unit or structure) left vision (which was visible last frame).
+        Same as the self.on_unit_destroyed event, this function is called with the unit's tag because the unit is no longer visible anymore.
+        If you want to store a snapshot of the unit, use self._enemy_units_previous_map[unit_tag] for units or self._enemy_structures_previous_map[unit_tag] for structures.
+        Examples::
+            last_known_unit = self._enemy_units_previous_map.get(unit_tag, None) or self._enemy_structures_previous_map[unit_tag]
+            print(f"Enemy unit left vision, last known location: {last_known_unit.position}")
+        :param unit_tag:
+        """
+        
     async def on_step(self, iteration) :
         # await self.changeBuild()
         self.sendTask()
