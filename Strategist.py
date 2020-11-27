@@ -10,12 +10,15 @@ from sc2.ids.upgrade_id import UpgradeId
 from sc2.units import Units
 from sc2.unit import Unit
 from Task import Task
+from ArmyLeader import ArmyLeader
+from GroupLeader import GroupLeader
 
 class Strategist(sc2.BotAI) :
     baseManager = None
     armyLeader = None
     intel = None
     buildOrder = []
+    unitGroups = [UnitTypeId.REAPER,UnitTypeId.HELLION,UnitTypeId.SIEGETANK]
 
     async def changeBuild(self) :
         """
@@ -90,19 +93,21 @@ class Strategist(sc2.BotAI) :
             ("07:00",Task(0, UnitTypeId.ARMORY, None, None))
         ]
 
+    def deleteFromGroup(self, unit_tag : int):
+        for group in self.armyLeader.groups:
+            unit = group.unitList.find_by_tag(unit_tag)
+            if unit != None:
+                group.unitList.pop(group.unitList.index(unit))
+                break
+
     async def on_unit_destroyed(self, unit_tag: int):
-        """
-        Override this in your bot class.
-        Note that this function uses unit tags and not the unit objects
-        because the unit does not exist any more.
-        This will event will be called when a unit (or structure) dies.
-        For enemy units, this only works if the enemy unit was in vision on death.
-        :param unit_tag:
-        """
+        self.deleteFromGroup(unit_tag)
 
     async def on_unit_created(self, unit: Unit):
-        """ Override this in your bot class. This function is called when a unit is created.
-        :param unit: """
+        if unit.type_id in self.unitGroups:
+            for group in self.armyLeader.groups:
+                if unit.type_id == group.unitID and group.unitList.amount < group.maxSize:
+                    group.unitList.append(unit)
 
     async def on_unit_took_damage(self, unit: Unit, amount_damage_taken: float):
         """
@@ -132,19 +137,26 @@ class Strategist(sc2.BotAI) :
             print(f"Enemy unit left vision, last known location: {last_known_unit.position}")
         :param unit_tag:
         """
-        
+
     async def on_step(self, iteration) :
         # await self.changeBuild()
         self.sendTask()
         # await self.setArmyStance()
         await self.baseManager.doAction()
-        # await self.armyLeader.doAction()
+        await self.armyLeader.doAction()
 
     def __init__(self):
         self.unit_command_uses_self_do = True
         self.baseManager = BaseManager(self)
-        # self.armyLeader = ArmyLeader(self)
+        self.armyLeader = ArmyLeader(self)
+        self.armyLeader.initGroups([
+            (UnitTypeId.REAPER, 1),
+            (UnitTypeId.HELLION, 16),
+            (UnitTypeId.SIEGETANK, 4),
+            # (UnitTypeId.REAPER, 1)
+        ])
 
+    # function from https://github.com/BurnySc2/python-sc2/blob/develop/examples/terran/mass_reaper.py
     async def distribute_workers(self, performanceHeavy=True, onlySaturateGas=False):
         mineralTags = [x.tag for x in self.mineral_field]
         gas_buildingTags = [x.tag for x in self.gas_buildings]
