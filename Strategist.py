@@ -33,16 +33,12 @@ class Strategist(sc2.BotAI) :
             self.baseManager.receiveTask(order[1])
 
     async def setArmyStance(self) :
-        # print(self.supply_army)
-        if (self.supply_used > 100):
+        if (self.supply_army < 110):
+            for group in self.armyLeader.groups:
+                group.stance = 0
+        elif (self.supply_army >= 110):
             for group in self.armyLeader.groups:
                 group.stance = 1
-        # if (self.supply_army < 130):
-        #     for group in self.armyLeader.groups:
-        #         group.stance = 0
-        # elif (self.supply_army >= 130):
-        #     for group in self.armyLeader.groups:
-        #         group.stance = 1
 
     async def on_start(self) :
 
@@ -55,7 +51,6 @@ class Strategist(sc2.BotAI) :
             ("00:29",Task(0, UnitTypeId.REFINERY, None, None)),
             ("00:44",Task(0, UnitTypeId.BARRACKS, self.main_base_ramp.barracks_in_middle, None)),
             ("01:32",Task(2, UnitTypeId.COMMANDCENTER, UnitTypeId.ORBITALCOMMAND, AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND)),
-            ("01:34",Task(1, UnitTypeId.REAPER, UnitTypeId.BARRACKS, None)),
             ("01:43",Task(0, UnitTypeId.COMMANDCENTER, None, None)),
             ("02:08",Task(0, UnitTypeId.FACTORY, None, None)),
             ("02:15",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
@@ -165,8 +160,8 @@ class Strategist(sc2.BotAI) :
         self.baseManager = BaseManager(self)
         self.armyLeader = ArmyLeader(self)
         self.armyLeader.initGroups([
-            (UnitTypeId.MARINE, 50),
-            (UnitTypeId.BATTLECRUISER, 15),
+            (UnitTypeId.MARINE, 65),
+            (UnitTypeId.BATTLECRUISER, 18),
             (UnitTypeId.MEDIVAC, 8),
             # (UnitTypeId.SIEGETANK, 4),
             # (UnitTypeId.REAPER, 1)

@@ -75,9 +75,9 @@ class GroupLeader(Agent):
 
     async def usualMedivac(self):
         for group in self.armyLeader.groups:
-            if group.type_id == UnitTypeId.MARINE and group.marshall != None:
-                if group.marshall.distance_to(self.unitList.center) > 8:
-                    self.moveUnits(group.marshall.position)
+            if group.unitID == UnitTypeId.MARINE and group.marshall != None:
+                if group.marshall.distance_to(self.marshall) > 8:
+                    await self.moveUnits(group.marshall)
                     break
 
     async def doAction(self):

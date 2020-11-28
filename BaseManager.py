@@ -6,6 +6,7 @@ from sc2.constants import COMMANDCENTER, SCV
 from sc2.ids.unit_typeid import UnitTypeId
 from sc2.ids.ability_id import AbilityId
 from Agent import Agent
+from Task import Task
 
 class BaseManager(Agent):
     async def buildHandler(self, task):
@@ -106,6 +107,7 @@ class BaseManager(Agent):
         return None
 
     async def doAction(self):
+        self.postBuildOrder()
         await self.handleTasks()
         self.buildWorkers()
         self.distributeIdleWorkers()
@@ -128,6 +130,28 @@ class BaseManager(Agent):
         for scv in self.env.workers.idle:
             self.env.do(scv.gather(self.env.mineral_field.closest_to(scv)))
 
+    def notProducing(self, id):
+        for task in self.tasks:
+            if id == task.id:
+                return False
+        return True
+
+    def postBuildOrder(self):
+        if self.env.time_formatted > self.buildTimeEnd:
+            for tg in self.targetList:
+                if self.env.units(tg[0]).amount < tg[2] and self.notProducing(tg[0]):
+                    self.receiveTask(Task(1,tg[0],tg[1],None))
+            if self.env.supply_left <= 10 and self.env.supply_cap != 200 and self.env.already_pending(UnitTypeId.SUPPLYDEPOT) == 0:
+                self.receiveTask(Task(0,UnitTypeId.SUPPLYDEPOT,None,None))
+
     maxWorkers = 50
     focusGas = True
+
+    targetList = [
+        (UnitTypeId.MARINE,UnitTypeId.BARRACKS,60),
+        (UnitTypeId.BATTLECRUISER,UnitTypeId.STARPORT,15),
+        (UnitTypeId.MEDIVAC,UnitTypeId.STARPORT,50),
+    ]
+
+    buildTimeEnd = "07:05"
     handler = [buildHandler, trainHandler, abilityHandler, researchHandler, expansionHandler]
