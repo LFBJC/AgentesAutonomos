@@ -9,7 +9,7 @@ from Agent import Agent
 
 class BaseManager(Agent):
     async def buildHandler(self, task):
-        if self.env.can_afford(task.id) and self.env.already_pending(task.id) == 0:
+        if self.env.can_afford(task.id) and self.env.tech_requirement_progress(task.id) == 1:
             if task.id == UnitTypeId.REFINERY:
                 for th in self.env.townhalls.ready:
                     vespenes = self.env.vespene_geyser.closer_than(10, th)
@@ -26,7 +26,10 @@ class BaseManager(Agent):
             if task.location and (await self.env.can_place(task.id, [task.location.position]))[0]:
                 chosen = self.env.workers.closest_to(task.location)
                 if chosen:
-                    result = self.env.do(chosen.build(task.id, task.location))
+                    if chosen.is_gathering:
+                        result = self.env.do(chosen.build(task.id, task.location))
+                    else:
+                        result = self.env.do(chosen.build(task.id, task.location, True))
                     if result:
                         return True
             else:
@@ -46,7 +49,7 @@ class BaseManager(Agent):
 
     async def trainHandler(self,task):
         for structure in self.env.structures(task.location).ready.idle:
-            if self.env.can_afford(task.id):
+            if self.env.can_afford(task.id) and self.env.tech_requirement_progress(task.id) == 1:
                 result = self.env.do(structure.train(task.id))
                 if (structure.has_reactor):
                     result = self.env.do(structure.train(task.id))
@@ -56,8 +59,11 @@ class BaseManager(Agent):
 
     async def abilityHandler(self, task):
         for st in self.env.structures(task.id).ready:
+            if task.id in [UnitTypeId.BARRACKS, UnitTypeId.STARPORT] and st.has_add_on:
+                continue
             if st.is_active:
                 self.env.do(st.stop())
+                return False
             if self.env.can_afford(task.upgrade) and self.env.tech_requirement_progress(task.location) == 1:
                 result = self.env.do(st(task.upgrade))
                 if result:
