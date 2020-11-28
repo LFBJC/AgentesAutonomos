@@ -60,7 +60,7 @@ class BaseManager(Agent):
 
     async def abilityHandler(self, task):
         for st in self.env.structures(task.id).ready:
-            if task.id in [UnitTypeId.BARRACKS, UnitTypeId.STARPORT] and st.has_add_on:
+            if task.id in [UnitTypeId.BARRACKS, UnitTypeId.STARPORT, UnitTypeId.ARMORY] and st.has_add_on:
                 continue
             if st.is_active:
                 self.env.do(st.stop())

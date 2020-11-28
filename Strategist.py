@@ -80,7 +80,8 @@ class Strategist(sc2.BotAI) :
             ("05:28",Task(0, UnitTypeId.STARPORT, None, None)),
             ("05:30",Task(2, UnitTypeId.STARPORT, UnitTypeId.TECHLAB, AbilityId.BUILD_TECHLAB_STARPORT)),
             ("05:35",Task(0, UnitTypeId.FUSIONCORE, None, None)),
-            ("05:41",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
+            ("05:40",Task(0, UnitTypeId.ARMORY, None, None)),
+            ("05:30",Task(2, UnitTypeId.ARMORY, UpgradeId.TERRANVEHICLEANDSHIPWEAPONSLEVEL1, AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL1)),            ("05:41",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
             ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
             ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
             ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
@@ -91,7 +92,14 @@ class Strategist(sc2.BotAI) :
             ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
             ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
             ("05:48",Task(2, UnitTypeId.COMMANDCENTER, UnitTypeId.ORBITALCOMMAND, AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND)),
-            ("07:00",Task(0, UnitTypeId.ARMORY, None, None))
+            ("06:00",Task(0, UnitTypeId.REFINERY, None,None)),
+            ("06:10",Task(0, UnitTypeId.REFINERY, None,None)),
+            ("07:35",Task(2, UnitTypeId.ARMORY, UpgradeId.TERRANVEHICLEANDSHIPWEAPONSLEVEL2, AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL2)),
+            ("09:40",Task(2, UnitTypeId.ARMORY, UpgradeId.TERRANVEHICLEANDSHIPWEAPONSLEVEL3, AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL3)),
+
+            #("06:20",Task(2, UnitTypeId.ARMORY, UpgradeId.TERRANVEHICLEANDSHIPWEAPONSLEVEL1,AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL1)),
+            #("06:45",Task(2, UnitTypeId.ARMORY, UpgradeId.TERRANVEHICLEANDSHIPWEAPONSLEVEL2,AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL2)),
+            #("07:00",Task(2, UnitTypeId.ARMORY, UpgradeId.TERRANVEHICLEANDSHIPWEAPONSLEVEL3,AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL3))
 
         ]
 
