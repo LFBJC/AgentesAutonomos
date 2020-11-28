@@ -49,7 +49,7 @@ class BaseManager(Agent):
 
     async def trainHandler(self,task):
         for structure in self.env.structures(task.location).ready.idle:
-            if self.env.can_afford(task.id) and self.env.tech_requirement_progress(task.id) == 1:
+            if self.env.can_afford(task.id) and self.env.tech_requirement_progress(task.id) == 1 and self.env.calculate_supply_cost(task.id) <= self.env.supply_left:
                 result = self.env.do(structure.train(task.id))
                 if (structure.has_reactor):
                     result = self.env.do(structure.train(task.id))

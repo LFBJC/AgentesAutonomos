@@ -45,6 +45,41 @@ class GroupLeader(Agent):
             closer = self.env.enemy_start_locations[0]
             await self.moveUnits(closer)
 
+    async def defensiveCruiser(self):
+        center = self.marshall.position
+        closer = None
+        if self.env.enemy_units.amount > 0:
+            closer = self.env.enemy_units.closest_to(center)
+            if True:
+                await self.focusAttack(closer)
+        elif self.env.enemy_structures.amount > 0:
+            closer = self.env.enemy_structures.closest_to(center)
+            await self.focusAttack(closer)
+        else:
+            closer = random.choice(self.env.structures).position
+            await self.moveUnits(closer)
+
+    async def agressiveCruiser(self):
+        center = self.marshall.position
+        closer = None
+        if self.env.enemy_units.amount > 0:
+            closer = self.env.enemy_units.closest_to(center)
+            if True:
+                await self.focusAttack(closer)
+        elif self.env.enemy_structures.amount > 0:
+            closer = self.env.enemy_structures.closest_to(center)
+            await self.focusAttack(closer)
+        else:
+            closer = self.env.enemy_start_locations[0]
+            await self.moveUnits(closer)
+
+    async def usualMedivac(self):
+        for group in self.armyLeader.groups:
+            if group.type_id == UnitTypeId.MARINE and group.marshall != None:
+                if group.marshall.distance_to(self.unitList.center) > 8:
+                    self.moveUnits(group.marshall.position)
+                    break
+
     async def doAction(self):
         if self.unitList.amount > 0:
             self.latePos = self.marshall.position
@@ -53,12 +88,17 @@ class GroupLeader(Agent):
     behaviours = [
         {
             UnitTypeId.MARINE : defensiveMarine,
+            UnitTypeId.BATTLECRUISER : defensiveCruiser,
+            UnitTypeId.MEDIVAC : usualMedivac,
         },
         {
             UnitTypeId.MARINE : agressiveMarine,
+            UnitTypeId.BATTLECRUISER : agressiveCruiser,
+            UnitTypeId.MEDIVAC : usualMedivac,
         }
     ]
 
+    armyLeader = None
     marshall = None
     latePos = None
     stance = None

@@ -19,7 +19,7 @@ class Strategist(sc2.BotAI) :
     intel = None
     mainBasePosition = None
     buildOrder = []
-    unitGroups = [UnitTypeId.MARINE,UnitTypeId.REAPER,UnitTypeId.HELLION,UnitTypeId.SIEGETANK]
+    unitGroups = [UnitTypeId.MARINE,UnitTypeId.BATTLECRUISER,UnitTypeId.MEDIVAC]
 
     async def changeBuild(self) :
         """
@@ -34,12 +34,15 @@ class Strategist(sc2.BotAI) :
 
     async def setArmyStance(self) :
         # print(self.supply_army)
-        if (self.supply_army <= 30):
-            for group in self.armyLeader.groups:
-                group.stance = 0
-        elif (self.supply_army > 30):
+        if (self.supply_used > 100):
             for group in self.armyLeader.groups:
                 group.stance = 1
+        # if (self.supply_army < 130):
+        #     for group in self.armyLeader.groups:
+        #         group.stance = 0
+        # elif (self.supply_army >= 130):
+        #     for group in self.armyLeader.groups:
+        #         group.stance = 1
 
     async def on_start(self) :
 
@@ -72,6 +75,10 @@ class Strategist(sc2.BotAI) :
             ("04:00",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
             ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
             ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
+            ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
+            ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
+            ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
+            ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
             ("04:31",Task(0, UnitTypeId.COMMANDCENTER, None, None)),
             ("04:48",Task(0, UnitTypeId.REFINERY, None, None)),
             ("04:50",Task(0, UnitTypeId.REFINERY, None, None)),
@@ -79,6 +86,12 @@ class Strategist(sc2.BotAI) :
             ("05:30",Task(2, UnitTypeId.STARPORT, UnitTypeId.TECHLAB, AbilityId.BUILD_TECHLAB_STARPORT)),
             ("05:35",Task(0, UnitTypeId.FUSIONCORE, None, None)),
             ("05:41",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
+            ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
+            ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
+            ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
+            ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
+            ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
+            ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
             ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
             ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
             ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
@@ -153,7 +166,8 @@ class Strategist(sc2.BotAI) :
         self.armyLeader = ArmyLeader(self)
         self.armyLeader.initGroups([
             (UnitTypeId.MARINE, 50),
-            # (UnitTypeId.HELLION, 16),
+            (UnitTypeId.BATTLECRUISER, 15),
+            (UnitTypeId.MEDIVAC, 8),
             # (UnitTypeId.SIEGETANK, 4),
             # (UnitTypeId.REAPER, 1)
         ])

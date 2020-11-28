@@ -24,6 +24,7 @@ class ArmyLeader(Agent):
             group.maxSize = model[1]
             group.unitList = Units([],self.env)
             group.stance = 0
+            group.armyLeader = self
             self.groups.append(group)
 
     messageQueue = []
