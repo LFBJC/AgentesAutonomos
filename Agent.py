@@ -11,6 +11,3 @@ class Agent :
         """
 
         """
-
-    def receiveTask(self,task):
-        self.tasks.append(task)

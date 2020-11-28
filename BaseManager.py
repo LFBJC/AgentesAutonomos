@@ -23,14 +23,15 @@ class BaseManager(Agent):
             if task.id == UnitTypeId.COMMANDCENTER:
                 task.location = await self.env.get_next_expansion()
 
-            if task.location == None:
-                task.location = await self.env.find_placement(task.id,random.choice(self.env.structures).position, 50, True, 4, True)
-            if task.location:
+            if task.location and (await self.env.can_place(task.id, [task.location.position]))[0]:
                 chosen = self.env.workers.closest_to(task.location)
                 if chosen:
                     result = self.env.do(chosen.build(task.id, task.location))
                     if result:
                         return True
+            else:
+                task.location = await self.env.find_placement(task.id,random.choice(self.env.structures).position, 80, True, 4, True)
+                return False
         return False
 
     async def expansionHandler(self, task):
@@ -47,12 +48,14 @@ class BaseManager(Agent):
         for structure in self.env.structures(task.location).ready.idle:
             if self.env.can_afford(task.id):
                 result = self.env.do(structure.train(task.id))
+                if (structure.has_reactor):
+                    result = self.env.do(structure.train(task.id))
                 if result:
                     return True
         return False
 
     async def abilityHandler(self, task):
-        for st in self.env.structures(task.id).ready.idle:
+        for st in self.env.structures(task.id).ready:
             if st.is_active:
                 self.env.do(st.stop())
             if self.env.can_afford(task.upgrade) and self.env.tech_requirement_progress(task.location) == 1:
@@ -101,8 +104,14 @@ class BaseManager(Agent):
         self.buildWorkers()
         self.distributeIdleWorkers()
         self.depotLower()
-        self.depotRaise()
+        # self.depotRaise()
         await self.env.distribute_workers()
+
+    def receiveTask(self,task):
+        if task.type != 2:
+            self.tasks.append(task)
+        else:
+            self.tasks.insert(0, task)
 
     def buildWorkers(self):
         for commandCenter in self.env.townhalls.idle:
@@ -113,6 +122,6 @@ class BaseManager(Agent):
         for scv in self.env.workers.idle:
             self.env.do(scv.gather(self.env.mineral_field.closest_to(scv)))
 
-    maxWorkers = 40
+    maxWorkers = 50
     focusGas = True
     handler = [buildHandler, trainHandler, abilityHandler, researchHandler, expansionHandler]

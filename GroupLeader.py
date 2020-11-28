@@ -1,56 +1,66 @@
 import sc2
 import Agent
 import collections
+import random
 from sc2.constants import COMMANDCENTER, SCV
 from sc2.ids.unit_typeid import UnitTypeId
 from Agent import Agent
 
 class GroupLeader(Agent):
-    async def defensiveReaper(self):
-        """
+    async def focusAttack(self, chosen):
+        for unit in self.unitList:
+            self.env.do(unit.attack(chosen))
 
-        """
+    async def moveUnits(self, chosen):
+        for unit in self.unitList:
+            if unit.distance_to(chosen) < 5 or unit.is_moving:
+                continue
+            self.env.do(unit.move(chosen))
 
-    async def defensiveHelion(self):
-        """
+    async def defensiveMarine(self):
+        center = self.marshall.position
+        closer = None
+        if self.env.enemy_units.amount > 0:
+            closer = self.env.enemy_units.closest_to(center)
+            if True:
+                await self.focusAttack(closer)
+        elif self.env.enemy_structures.amount > 0:
+            closer = self.env.enemy_structures.closest_to(center)
+            await self.focusAttack(closer)
+        else:
+            closer = random.choice(self.env.structures).position
+            await self.moveUnits(closer)
 
-        """
-
-    async def defensiveTank(self):
-        """
-
-        """
-
-    async def agressiveReaper(self):
-        """
-
-        """
-
-    async def agressiveHelion(self):
-        """
-
-        """
-
-    async def agressiveTank(self):
-        """
-
-        """
+    async def agressiveMarine(self):
+        center = self.marshall.position
+        closer = None
+        if self.env.enemy_units.amount > 0:
+            closer = self.env.enemy_units.closest_to(center)
+            if True:
+                await self.focusAttack(closer)
+        elif self.env.enemy_structures.amount > 0:
+            closer = self.env.enemy_structures.closest_to(center)
+            await self.focusAttack(closer)
+        else:
+            closer = self.env.enemy_start_locations[0]
+            await self.moveUnits(closer)
 
     async def doAction(self):
-        await self.behaviours[self.stance][self.unitID](self)
+        if self.unitList.amount > 0:
+            self.latePos = self.marshall.position
+            await self.behaviours[self.stance][self.unitID](self)
 
     behaviours = [
         {
-            UnitTypeId.REAPER : defensiveReaper,
-            UnitTypeId.HELLION : defensiveHelion,
-            UnitTypeId.SIEGETANK : defensiveTank
+            UnitTypeId.MARINE : defensiveMarine,
         },
         {
-            UnitTypeId.REAPER : agressiveReaper,
-            UnitTypeId.HELLION : agressiveHelion ,
-            UnitTypeId.SIEGETANK : agressiveTank
+            UnitTypeId.MARINE : agressiveMarine,
         }
     ]
+
+    marshall = None
+    latePos = None
     stance = None
     unitID = None
     unitList = None

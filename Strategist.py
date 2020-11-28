@@ -17,8 +17,9 @@ class Strategist(sc2.BotAI) :
     baseManager = None
     armyLeader = None
     intel = None
+    mainBasePosition = None
     buildOrder = []
-    unitGroups = [UnitTypeId.REAPER,UnitTypeId.HELLION,UnitTypeId.SIEGETANK]
+    unitGroups = [UnitTypeId.MARINE,UnitTypeId.REAPER,UnitTypeId.HELLION,UnitTypeId.SIEGETANK]
 
     async def changeBuild(self) :
         """
@@ -32,58 +33,95 @@ class Strategist(sc2.BotAI) :
             self.baseManager.receiveTask(order[1])
 
     async def setArmyStance(self) :
-        """
-            check intel and determine best army behaviour
-        """
+        # print(self.supply_army)
+        if (self.supply_army <= 30):
+            for group in self.armyLeader.groups:
+                group.stance = 0
+        elif (self.supply_army > 30):
+            for group in self.armyLeader.groups:
+                group.stance = 1
 
     async def on_start(self) :
 
         rp = list(self.main_base_ramp.corner_depots)
+
+        self.mainBasePosition = self.townhalls[0].position
 
         self.buildOrder = [
             ("00:17",Task(0, UnitTypeId.SUPPLYDEPOT, rp[0], None)),
             ("00:29",Task(0, UnitTypeId.REFINERY, None, None)),
             ("00:44",Task(0, UnitTypeId.BARRACKS, self.main_base_ramp.barracks_in_middle, None)),
             ("01:32",Task(2, UnitTypeId.COMMANDCENTER, UnitTypeId.ORBITALCOMMAND, AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND)),
-            ("01:34",Task(1, UnitTypeId.REAPER, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("01:34",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+
             ("01:43",Task(0, UnitTypeId.COMMANDCENTER, None, None)),
             ("02:08",Task(0, UnitTypeId.FACTORY, None, None)),
             ("02:15",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
             ("02:21",Task(0, UnitTypeId.REFINERY, None, None)),
-            ("02:51",Task(0, UnitTypeId.FACTORY, None, None)),
-            ("02:52",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
-            ("02:52",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
-            ("02:57",Task(2, UnitTypeId.BARRACKS, UnitTypeId.TECHLAB, AbilityId.BUILD_TECHLAB_BARRACKS)),
+            # ("02:51",Task(0, UnitTypeId.FACTORY, None, None)),
+            # ("02:52",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
+            # ("02:52",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
+            ("02:57",Task(2, UnitTypeId.BARRACKS, UnitTypeId.TECHLAB, AbilityId.BUILD_REACTOR_BARRACKS)),
             ("03:01",Task(2, UnitTypeId.COMMANDCENTER, UnitTypeId.ORBITALCOMMAND, AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND)),
-            ("03:17",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
-            ("03:39",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
-            ("03:39",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
-            ("03:45",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
+
+            # ("03:17",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
+            # ("03:39",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
+            # ("03:39",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
+            # ("03:45",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
+            ("03:50",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
             ("03:50",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
             ("04:00",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
             ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
             ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
-            ("04:17",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
-            ("04:17",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
-            ("04:22",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
+            # ("04:17",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
+            # ("04:17",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
+            # ("04:22",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
             ("04:31",Task(0, UnitTypeId.COMMANDCENTER, None, None)),
-            ("04:41",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
-            ("04:41",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
+            # ("04:41",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
+            # ("04:41",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
             ("04:48",Task(0, UnitTypeId.REFINERY, None, None)),
             ("04:48",Task(0, UnitTypeId.REFINERY, None, None)),
-            ("04:57",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
+            # ("04:57",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
             # ("05:27",Task(4, UnitTypeId.BARRACKS, None, UnitTypeId.TECHLAB)),
-            ("05:28",Task(0, UnitTypeId.FACTORY, None, None)),
-            ("05:28",Task(0, UnitTypeId.FACTORY, None, None)),
-            ("05:29",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
-            ("05:35",Task(0, UnitTypeId.FACTORY, None, None)),
-            ("05:45",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
+            # ("05:28",Task(0, UnitTypeId.FACTORY, None, None)),
+            # ("05:28",Task(0, UnitTypeId.FACTORY, None, None)),
+            # ("05:29",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
+            # ("05:35",Task(0, UnitTypeId.FACTORY, None, None)),
+            # ("05:45",Task(1, UnitTypeId.HELLION, UnitTypeId.FACTORY, None)),
             ("05:48",Task(2, UnitTypeId.COMMANDCENTER, UnitTypeId.ORBITALCOMMAND, AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND)),
             # ("05:58",Task(4, UnitTypeId.BARRACKS, None, UnitTypeId.TECHLAB)),
-            ("06:05",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
+            # ("06:05",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
             ("06:11",Task(0, UnitTypeId.ENGINEERINGBAY, None, None)),
             # ("06:21",Task(4, UnitTypeId.FACTORY, None, UnitTypeId.REACTOR)),
-            ("06:24",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
+            # ("06:24",Task(1, UnitTypeId.SIEGETANK, UnitTypeId.FACTORY, None)),
             ("06:41",Task(0, UnitTypeId.MISSILETURRET, None, None)),
             ("06:41",Task(0, UnitTypeId.MISSILETURRET, None, None)),
             ("06:41",Task(0, UnitTypeId.MISSILETURRET, None, None)),
@@ -97,7 +135,12 @@ class Strategist(sc2.BotAI) :
         for group in self.armyLeader.groups:
             unit = group.unitList.find_by_tag(unit_tag)
             if unit != None:
-                group.unitList.pop(group.unitList.index(unit))
+                removed = group.unitList.pop(group.unitList.index(unit))
+                if (group.marshall == removed):
+                    if group.unitList.amount > 0:
+                        group.marshall = group.unitList.closest_to(group.latePos)
+                    else:
+                        group.marshall = None
                 break
 
     async def on_unit_destroyed(self, unit_tag: int):
@@ -107,7 +150,10 @@ class Strategist(sc2.BotAI) :
         if unit.type_id in self.unitGroups:
             for group in self.armyLeader.groups:
                 if unit.type_id == group.unitID and group.unitList.amount < group.maxSize:
+                    if group.unitList.amount == 0:
+                        group.marshall = unit
                     group.unitList.append(unit)
+                    break
 
     async def on_unit_took_damage(self, unit: Unit, amount_damage_taken: float):
         """
@@ -141,7 +187,7 @@ class Strategist(sc2.BotAI) :
     async def on_step(self, iteration) :
         # await self.changeBuild()
         self.sendTask()
-        # await self.setArmyStance()
+        await self.setArmyStance()
         await self.baseManager.doAction()
         await self.armyLeader.doAction()
 
@@ -150,9 +196,9 @@ class Strategist(sc2.BotAI) :
         self.baseManager = BaseManager(self)
         self.armyLeader = ArmyLeader(self)
         self.armyLeader.initGroups([
-            (UnitTypeId.REAPER, 1),
-            (UnitTypeId.HELLION, 16),
-            (UnitTypeId.SIEGETANK, 4),
+            (UnitTypeId.MARINE, 50),
+            # (UnitTypeId.HELLION, 16),
+            # (UnitTypeId.SIEGETANK, 4),
             # (UnitTypeId.REAPER, 1)
         ])
 
