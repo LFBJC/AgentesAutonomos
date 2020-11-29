@@ -141,17 +141,17 @@ class BaseManager(Agent):
             for tg in self.targetList:
                 if self.env.units(tg[0]).amount < tg[2] and self.notProducing(tg[0]):
                     self.receiveTask(Task(1,tg[0],tg[1],None))
-            if self.env.supply_left <= 10 and self.env.supply_cap != 200 and self.env.already_pending(UnitTypeId.SUPPLYDEPOT) == 0:
+            if self.env.supply_left <= 16 and self.env.supply_cap != 200 and self.env.already_pending(UnitTypeId.SUPPLYDEPOT) == 0:
                 self.receiveTask(Task(0,UnitTypeId.SUPPLYDEPOT,None,None))
 
     maxWorkers = 50
     focusGas = True
 
     targetList = [
-        (UnitTypeId.MARINE,UnitTypeId.BARRACKS,60),
-        (UnitTypeId.BATTLECRUISER,UnitTypeId.STARPORT,15),
-        (UnitTypeId.MEDIVAC,UnitTypeId.STARPORT,50),
+        (UnitTypeId.MARINE,UnitTypeId.BARRACKS,50),
+        (UnitTypeId.BATTLECRUISER,UnitTypeId.STARPORT,20),
+        # (UnitTypeId.MEDIVAC,UnitTypeId.STARPORT,4),
     ]
 
-    buildTimeEnd = "07:05"
+    buildTimeEnd = "06:20"
     handler = [buildHandler, trainHandler, abilityHandler, researchHandler, expansionHandler]

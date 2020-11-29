@@ -13,7 +13,7 @@ class GroupLeader(Agent):
 
     async def moveUnits(self, chosen):
         for unit in self.unitList:
-            if unit.distance_to(chosen) < 5 or unit.is_moving:
+            if unit.is_moving:
                 continue
             self.env.do(unit.move(chosen))
 
@@ -81,6 +81,8 @@ class GroupLeader(Agent):
                     break
 
     async def doAction(self):
+        for unit in self.unitList:
+            unit = self.env.units.find_by_tag(unit.tag)
         if self.unitList.amount > 0:
             self.latePos = self.marshall.position
             await self.behaviours[self.stance][self.unitID](self)

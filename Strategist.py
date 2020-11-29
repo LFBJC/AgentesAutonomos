@@ -33,10 +33,10 @@ class Strategist(sc2.BotAI) :
             self.baseManager.receiveTask(order[1])
 
     async def setArmyStance(self) :
-        if (self.supply_army < 110):
+        if (self.supply_army < 120):
             for group in self.armyLeader.groups:
                 group.stance = 0
-        elif (self.supply_army >= 110):
+        elif (self.supply_army >= 120):
             for group in self.armyLeader.groups:
                 group.stance = 1
 
@@ -50,14 +50,16 @@ class Strategist(sc2.BotAI) :
             ("00:17",Task(0, UnitTypeId.SUPPLYDEPOT, rp[0], None)),
             ("00:29",Task(0, UnitTypeId.REFINERY, None, None)),
             ("00:44",Task(0, UnitTypeId.BARRACKS, self.main_base_ramp.barracks_in_middle, None)),
+            ("00:45",Task(2, UnitTypeId.BARRACKS, UnitTypeId.REACTOR, AbilityId.BUILD_REACTOR_BARRACKS)),
             ("01:32",Task(2, UnitTypeId.COMMANDCENTER, UnitTypeId.ORBITALCOMMAND, AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND)),
             ("01:43",Task(0, UnitTypeId.COMMANDCENTER, None, None)),
             ("02:08",Task(0, UnitTypeId.FACTORY, None, None)),
+            ("02:10",Task(0, UnitTypeId.ENGINEERINGBAY, None, None)),
             ("02:15",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
             ("02:21",Task(0, UnitTypeId.REFINERY, None, None)),
             ("02:51",Task(0, UnitTypeId.STARPORT, None, None)),
+            ("02:52",Task(2, UnitTypeId.ENGINEERINGBAY, UpgradeId.TERRANINFANTRYWEAPONSLEVEL1 , AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL1)),
             ("02:53",Task(2, UnitTypeId.STARPORT, UnitTypeId.TECHLAB, AbilityId.BUILD_TECHLAB_STARPORT)),
-            ("02:57",Task(2, UnitTypeId.BARRACKS, UnitTypeId.REACTOR, AbilityId.BUILD_REACTOR_BARRACKS)),
             ("03:01",Task(2, UnitTypeId.COMMANDCENTER, UnitTypeId.ORBITALCOMMAND, AbilityId.UPGRADETOORBITAL_ORBITALCOMMAND)),
             ("03:17",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
             ("03:18",Task(1, UnitTypeId.MARINE, UnitTypeId.BARRACKS, None)),
@@ -70,19 +72,17 @@ class Strategist(sc2.BotAI) :
             ("04:00",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
             ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
             ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
-            ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
-            ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
-            ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
-            ("04:14",Task(0, UnitTypeId.SUPPLYDEPOT, None, None)),
+            ("04:17",Task(0, UnitTypeId.STARPORT, None, None)),
+            ("04:18",Task(2, UnitTypeId.STARPORT, UnitTypeId.TECHLAB, AbilityId.BUILD_TECHLAB_STARPORT)),
             ("04:31",Task(0, UnitTypeId.COMMANDCENTER, None, None)),
             ("04:48",Task(0, UnitTypeId.REFINERY, None, None)),
+            ("04:49",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
             ("04:50",Task(0, UnitTypeId.REFINERY, None, None)),
             ("05:28",Task(0, UnitTypeId.STARPORT, None, None)),
             ("05:30",Task(2, UnitTypeId.STARPORT, UnitTypeId.TECHLAB, AbilityId.BUILD_TECHLAB_STARPORT)),
             ("05:35",Task(0, UnitTypeId.FUSIONCORE, None, None)),
             ("05:40",Task(0, UnitTypeId.ARMORY, None, None)),
-            ("05:30",Task(2, UnitTypeId.ARMORY, UpgradeId.TERRANVEHICLEANDSHIPWEAPONSLEVEL1, AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL1)),            ("05:41",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
-            ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
+            ("05:30",Task(2, UnitTypeId.ARMORY, UpgradeId.TERRANVEHICLEANDSHIPWEAPONSLEVEL1, AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL1)),
             ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
             ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
             ("05:42",Task(1, UnitTypeId.BATTLECRUISER, UnitTypeId.STARPORT, None)),
@@ -95,13 +95,19 @@ class Strategist(sc2.BotAI) :
             ("06:00",Task(0, UnitTypeId.REFINERY, None,None)),
             ("06:10",Task(0, UnitTypeId.REFINERY, None,None)),
             ("07:35",Task(2, UnitTypeId.ARMORY, UpgradeId.TERRANVEHICLEANDSHIPWEAPONSLEVEL2, AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL2)),
+            ("07:42",Task(2, UnitTypeId.ENGINEERINGBAY, UpgradeId.TERRANINFANTRYWEAPONSLEVEL2 ,AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL2)),
             ("09:40",Task(2, UnitTypeId.ARMORY, UpgradeId.TERRANVEHICLEANDSHIPWEAPONSLEVEL3, AbilityId.ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL3)),
-
+            ("09:55",Task(2, UnitTypeId.ENGINEERINGBAY, UpgradeId.TERRANINFANTRYWEAPONSLEVEL3 , AbilityId.ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL3)),
             #("06:20",Task(2, UnitTypeId.ARMORY, UpgradeId.TERRANVEHICLEANDSHIPWEAPONSLEVEL1,AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL1)),
             #("06:45",Task(2, UnitTypeId.ARMORY, UpgradeId.TERRANVEHICLEANDSHIPWEAPONSLEVEL2,AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL2)),
             #("07:00",Task(2, UnitTypeId.ARMORY, UpgradeId.TERRANVEHICLEANDSHIPWEAPONSLEVEL3,AbilityId.ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL3))
 
         ]
+
+
+
+
+
 
     def deleteFromGroup(self, unit_tag : int):
         for group in self.armyLeader.groups:
@@ -169,8 +175,8 @@ class Strategist(sc2.BotAI) :
         self.armyLeader = ArmyLeader(self)
         self.armyLeader.initGroups([
             (UnitTypeId.MARINE, 65),
-            (UnitTypeId.BATTLECRUISER, 18),
-            (UnitTypeId.MEDIVAC, 8),
+            (UnitTypeId.BATTLECRUISER, 20),
+            (UnitTypeId.MEDIVAC, 10),
             # (UnitTypeId.SIEGETANK, 4),
             # (UnitTypeId.REAPER, 1)
         ])
